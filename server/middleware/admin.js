@@ -1,0 +1,50 @@
+
+var User = require('../models/user');
+var jwt = require('jsonwebtoken');
+
+
+const admin =async(req,res,next)=>{
+
+    try{
+       
+        const token = req.header("x-auth-token");
+        
+        if(!token)
+        return res.status(401).json({msg:"no auth token, access denied"});
+
+        const verified = jwt.verify(token,"passwordKey");
+        
+
+        if(!verified)
+        return res.status(401).json({msg:"token verification failed, authorization denied"});
+
+        console.log(verified.id);
+        const user =  await User.findById(verified.id);
+
+
+        // here we check the user is admin or not
+        console.log(user.type);
+        if(user.type != "admin"){
+            return res.status(401).json({msg:"not the admin , access denied"});
+        }
+
+
+       // request me hamko ek req.user milta hai ham usme verified.id se id dal denge taki hame body me id bhejni hi na pde
+        req.user = verified.id; // ab ham jb call back funtion likhege to wha pr req.user karne se hamko directly user ki id mil jayegi
+        next();
+        
+    }
+    catch(err){
+        console.log('error in middleware');
+        res.status(500).json({error:err.message});
+    }
+
+
+
+
+
+
+
+
+}
+module.exports = admin;
