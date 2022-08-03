@@ -11,7 +11,7 @@ const userRouter = require('./routes/user.js');
 const PORT = 9000;
 const app = express();
 // es link se hame database ka acces mil rha hai
-const DB = "mongodb+srv://gautam:1234@cluster0.qqghlzn.mongodb.net/?retryWrites=true&w=majority";
+const DB = "mongodb+srv://cluster0.qqghlzn.mongodb.net/?retryWrites=true&w=majority";
 
 
 
